@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<title>Process Portal</title>
+	<link rel="stylesheet" href="css/style.css"></link>
+</head>
+<body>
+
+<section id="home">
+<div id="funcbox">
+	<h2>Process Portal</h2>
+	<h3>Home Page</h3>
+	<center>
+		<table border="0" cellspacing="10" cellpadding="10">
+			<tr>
+				<td><input type="button" value="Search by Function" name="frmHome_SearchByFunction" id="frmHome_SearchByFunction"></input></td>
+				<td><input type="button" value="Search by Role" name="frmHome_SearchByRole" id="frmHome_SearchByRole"></input></td>
+			</tr>
+		</table>
+	</center>
+</div
+</section>
+
+<script src="js/jquery-1.11.1.min.js" type="text/javascript"></script>
+<script src="js/mustache-0.8.1.min.js" type="text/javascript"></script>
+<script src="js/polyfill.js" type="text/javascript"></script>
+<script src="js/general.js" type="text/javascript"></script>
+<script src="js/script.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+$("document").ready(function(e){
+	if(!LocalValidateToken()) {
+		return;
+	}
+	$("#frmHome_SearchByFunction").click( function(e) {
+		window.location.href = "searchByFunction.html";
+	}); // search by function
+	$("#frmHome_SearchByRole").click( function(e) {
+		window.location.href = "searchByRole.html";
+	}); // search by role
+});
+</script>
+</body>
+</html>

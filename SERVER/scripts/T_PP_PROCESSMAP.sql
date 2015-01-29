@@ -1,0 +1,15 @@
+CREATE TABLE T_PP_PROCESSMAP
+(
+	cProcess 			NVARCHAR(20)	NOT NULL,
+	cVertical			NVARCHAR(20)	NOT NULL,
+	cProduct			NVARCHAR(20)	NOT NULL,
+	cFunc 				NVARCHAR(20)	NOT NULL,
+	cRole				NVARCHAR(20)	NOT NULL,
+	nDisplayOrder		DECIMAL(4)		NOT NULL,
+	cIsActive			NVARCHAR(1)		NOT NULL,
+	PRIMARY KEY(cProcess, cVertical, cProduct, cFunc, cRole),
+	FOREIGN KEY(cProcess) REFERENCES T_PP_PROCESS(cProcess),
+	FOREIGN KEY(cVertical) REFERENCES T_PP_VERTICAL(cVertical),
+	FOREIGN KEY(cFunc, cRole) REFERENCES T_PP_ROLE(cFunc, cRole),
+	CONSTRAINT C_PP_PROCESSMAP_01 CHECK(cIsActive IN('Y','N'))
+)

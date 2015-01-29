@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<title>Process Portal</title>
+	<link rel="stylesheet" href="css/style.css"></link>
+</head>
+<body>
+
+<section id="home">
+<div id="funcbox">
+	<h2>Process Portal</h2>
+	<h3>Search By Role</h3>
+	<center>
+		<table border="0" cellspacing="10" cellpadding="10">
+			<tr>
+				<td>Vertical</td>
+				<td>
+					<select name="frmSBR_selVertical" id="frmSBR_selVertical">
+						<option value="">(Please wait)</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Function</td>
+				<td>
+					<select name="frmSBR_selFunction" id="frmSBR_selFunction">
+						<option value="">(Choose a Function)</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Role</td>
+				<td>
+					<select name="frmSBR_selRole" id="frmSBR_selRole">
+						<option value="">(Choose a Role)</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Product</td>
+				<td>
+					<select name="frmSBR_selProduct" id="frmSBR_selProduct">
+						<option value="">(Choose a Product)</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Process</td>
+				<td>
+					<select name="frmSBR_selProcess" id="frmSBR_selProcess">
+						<option value="">(Choose a Process)</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					<input type="button" name="frmSBR_ViewProcess" id="frmSBR_ViewProcess" value="View Process"></input>
+				</td>
+			</tr>
+		</table>
+	</center>
+</div
+</section>
+
+<script src="js/jquery-1.11.1.min.js" type="text/javascript"></script>
+<script src="js/mustache-0.8.1.min.js" type="text/javascript"></script>
+<script src="js/polyfill.js" type="text/javascript"></script>
+<script src="js/general.js" type="text/javascript"></script>
+<script src="js/script.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+$("document").ready(function(e){
+	if(!LocalValidateToken()) {
+		return;
+	}
+	$.ajax(
+	{
+	  Type: "POST",
+	  contentType: "application/json",
+	  url: "api_PP_GetVertical.asp?callback=?",
+	  data: { 
+	  	'txtParam1': Z_GetMe(), 
+	  	'txtParam2': Z_GetToken()
+	  },
+	  success: function(rv) {
+	    var o = jQuery.parseJSON(rv);
+	    if(o.bIsError)
+	    {
+	      alert("Unable to retrieve vertical list: " + o.cErrorMessage);
+	      return;
+	    }
+	    else
+	    {
+	      var jscVertical = '';
+	      var ji = 0;
+	      jscVertical += '<option value="">(Choose a Vertical)</option>';
+	      for(ji=0; ji < o.nVerticals; ji++) {
+	      	jscVertical += '<option value="' + o.aVerticals[ji].cVertical + '">' + o.aVerticals[ji].cName + '</option>';
+	      }
+	      $("#frmSBR_selVertical").html(jscVertical);
+	      return;
+	    }
+	  }
+	}); // AJAX for GetVertical
+	$("#frmSBR_selVertical").blur(function(e){
+		var jscFunction = '', jscRole = '', jscProduct = '', jscProcess = '';
+		jscFunction = '<option value="">Please wait ...</option>';
+		$("#frmSBR_selFunction").html(jscFunction); 
+		jscRole = '<option value="">(Choose a Role)</option>';
+		$("#frmSBR_selRole").html(jscRole); 
+		jscProduct = '<option value="">(Choose a Product)</option>';
+		$("#frmSBR_selProduct").html(jscProduct);
+		jscProcess = '<option value="">(Choose a Process)</option>';
+		$("#frmSBR_selProcess").html(jscProcess); 
+		$.ajax(
+		{
+		  Type: "POST",
+		  contentType: "application/json",
+		  url: "api_PP_GetVerticalFunction.asp?callback=?",
+		  data: { 
+		  	'txtParam1': Z_GetMe(), 
+		  	'txtParam2': Z_GetToken(),
+		  	'txtParamcVertical': $("#frmSBR_selVertical").val()
+		  },
+		  success: function(rv) {
+		    var o = jQuery.parseJSON(rv);
+		    if(o.bIsError)
+		    {
+		      alert("Unable to retrieve functions for the selected vertical: " + o.cErrorMessage);
+		      return;
+		    }
+		    else
+		    {
+		      jscFunction = '';
+		      var ji = 0;
+		      jscFunction += '<option value="">(Choose a Function)</option>';
+		      for(ji=0; ji < o.nFunctions; ji++) {
+		      	jscFunction += '<option value="' + o.aFunctions[ji].cFunction + '">' + o.aFunctions[ji].cName + '</option>';
+		      }
+		      $("#frmSBR_selFunction").html(jscFunction);
+		      return;
+		    }
+		  }
+		}); // AJAX for GetVerticalFunction		
+	}); // blur of selVertical
+	$("#frmSBR_selFunction").blur(function(e){
+		var jscRole = '', jscProcess = '', jscProduct = '';
+		jscRole = '<option value="">Please wait ...</option>';
+		$("#frmSBR_selRole").html(jscRole); 
+		jscProcess = '<option value="">(Choose a Process)</option>';
+		$("frmSBR_selProcess").html(jscProcess);
+		jscProduct = '<option value="">(Choose a Product)</option>';
+		$("frmSBR_selProduct").html(jscProduct);
+		$.ajax(
+		{
+		  Type: "POST",
+		  contentType: "application/json",
+		  url: "api_PP_GetVerticalFunctionRole.asp?callback=?",
+		  data: { 
+		  	'txtParam1': Z_GetMe(), 
+		  	'txtParam2': Z_GetToken(),
+		  	'txtParamcVertical': $("#frmSBR_selVertical").val(),
+		  	'txtParamcFunction': $("#frmSBR_selFunction").val()
+		  },
+		  success: function(rv) {
+		    var o = jQuery.parseJSON(rv);
+		    if(o.bIsError)
+		    {
+		      alert("Unable to retrieve roles for function: " + o.cErrorMessage);
+		      return;
+		    }
+		    else
+		    {
+		      jscRole = '';
+		      var ji = 0;
+		      jscRole += '<option value="">(Choose a Role)</option>';
+		      for(ji=0; ji < o.nRoles; ji++) {
+		      	jscRole += '<option value="' + o.aRoles[ji].cRole + '">' + o.aRoles[ji].cName + '</option>';
+		      }
+		      $("#frmSBR_selRole").html(jscRole);
+		      return;
+		    }
+		  }
+		}); // AJAX for GetVerticalFunctionRole
+	}); // blur of selProcess
+	$("#frmSBR_selRole").blur(function(e){
+		var jscProcess = '', jscProduct = '';
+		jscProduct = '<option value="">Please wait ...</option>';
+		$("#frmSBR_selProduct").html(jscProduct);
+		jscProcess = '<option value="">(Choose a Process)</option>';
+		$("#frmSBR_selProcess").html(jscProcess);
+		$.ajax(
+		{
+		  Type: "POST",
+		  contentType: "application/json",
+		  url: "api_PP_GetVerticalFunctionRoleProduct.asp?callback=?",
+		  data: { 
+		  	'txtParam1': Z_GetMe(), 
+		  	'txtParam2': Z_GetToken(),
+		  	'txtParamcVertical': $("#frmSBR_selVertical").val(),
+		  	'txtParamcFunction': $("#frmSBR_selFunction").val(),
+		  	'txtParamcRole': $("#frmSBR_selRole").val()
+		  },
+		  success: function(rv) {
+		    var o = jQuery.parseJSON(rv);
+		    if(o.bIsError)
+		    {
+		      alert("Unable to retrieve products for role: " + o.cErrorMessage);
+		      return;
+		    }
+		    else
+		    {
+		      jscProduct = '';
+		      var ji = 0;
+		      jscProduct += '<option value="">(Choose a Product)</option>';
+		      for(ji=0; ji < o.nProducts; ji++) {
+		      	jscProduct += '<option value="' + o.aProducts[ji].cProduct + '">' + o.aProducts[ji].cName + '</option>';
+		      }
+		      $("#frmSBR_selProduct").html(jscProduct);
+		      return;
+		    }
+		  }
+		}); // AJAX for GetVerticalFunctionRoleProduct
+	}); // blur of selRole
+	$("#frmSBR_selProduct").blur(function(e){
+		var jscProcess = '';
+		jscProcess = '<option value="">Please wait ...</option>';
+		$("#frmSBR_selProcess").html(jscProcess);
+		$.ajax(
+		{
+		  Type: "POST",
+		  contentType: "application/json",
+		  url: "api_PP_GetVertFuncRoleProdProc.asp?callback=?",
+		  data: { 
+		  	'txtParam1': Z_GetMe(), 
+		  	'txtParam2': Z_GetToken(),
+		  	'txtParamcVertical': $("#frmSBR_selVertical").val(),
+		  	'txtParamcFunction': $("#frmSBR_selFunction").val(),
+		  	'txtParamcRole': $("#frmSBR_selRole").val(),
+		  	'txtParamcProduct': $("#frmSBR_selProduct").val()
+		  },
+		  success: function(rv) {
+		    var o = jQuery.parseJSON(rv);
+		    if(o.bIsError)
+		    {
+		      alert("Unable to retrieve processes for product: " + o.cErrorMessage);
+		      return;
+		    }
+		    else
+		    {
+		      jscProcess = '';
+		      var ji = 0;
+		      jscProcess += '<option value="">(Choose a Process)</option>';
+		      for(ji=0; ji < o.nProcesses; ji++) {
+		      	jscProcess += '<option value="' + o.aProcesses[ji].cProcess + '">' + o.aProcesses[ji].cName + '</option>';
+		      }
+		      $("#frmSBR_selProcess").html(jscProcess);
+		      return;
+		    }
+		  }
+		}); // AJAX for GetVerticalFunctionRoleProductProcess
+	}); // blur of selProduct
+	$("#frmSBR_selProcess").blur(function(e){
+		//alert("Blur");
+	});
+	$("#frmSBR_ViewProcess").click(function(e){
+		if($("#frmSBR_selProcess").prop('selectedIndex') < 1) {
+			alert("Please select a Process");
+			return;
+		}
+	    alert("About to show data for process: " + $( "#frmSBR_selProcess option:selected" ).text());
+  		Z_SetProcess($('#frmSBR_selProcess').val());
+  		window.location.href = "viewProcess.html";
+
+/*		ShowProcess($('#frmSBR_selProcess').val(), $( "#frmSBF_selProcess option:selected" ).text());
+*/
+	});
+}); // document.ready function
+</script>
+</body>
+</html>

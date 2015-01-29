@@ -1,0 +1,12 @@
+/*
+TCL blue: #2c6eb5
+TCL lime: #d7df36;
+*/
+body{
+	background-color: #d7df36;
+	font-family: Verdana;
+}
+
+h1, h2, h3, h4 {
+	text-align: center;
+}

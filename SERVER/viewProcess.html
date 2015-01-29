@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<title>Process Portal</title>
+	<link rel="stylesheet" href="css/style.css"></link>
+</head>
+<body>
+
+<section id="home">
+<div id="funcbox">
+	<!-- <h2>Process Portal</h2> -->
+	<center>
+		<div name="frmVP_hdr" id="frmVP_hdr"></div>
+		<div name="frmVP_data" id="frmVP_data"></div>
+	</center>
+</div
+</section>
+
+<script src="js/jquery-1.11.1.min.js" type="text/javascript"></script>
+<script src="js/mustache-0.8.1.min.js" type="text/javascript"></script>
+<script src="js/polyfill.js" type="text/javascript"></script>
+<script src="js/general.js" type="text/javascript"></script>
+<script src="js/script.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+$("document").ready(function(e){
+	if(!LocalValidateToken()) {
+		return;
+	}
+	$.ajax(
+	{
+	  Type: "POST",
+	  contentType: "application/json",
+	  url: "api_PP_GetProcessData.asp?callback=?",
+	  data: { 
+	  	'txtParam1': Z_GetMe(), 
+	  	'txtParam2': Z_GetToken(),
+	  	'txtParamcProcess': Z_GetProcess()
+	  },
+	  success: function(rv) {
+	    var o = jQuery.parseJSON(rv);
+	    if(o.bIsError)
+	    {
+	      alert("Unable to retrieve process data: " + o.cErrorMessage);
+	      return;
+	    }
+	    else
+	    {
+	      var jscHdr = '<table border="1" cellspacing="1" cellpadding="2">';
+	      jscHdr += '<tr>' + 
+	      	'<td>Process</td>' + 
+	      	'<td>' + o.cProcessName + ' [' + o.cProcess + ']' + '</td>' + 
+	      	'</tr>';
+	      jscHdr += '<tr>' + 
+	      	'<td>Version No.</td>' + 
+	      	'<td>' + o.cMajor + '.' + o.cMinor + '</td>' +
+	      	'</tr>';
+	      jscHdr += '</table>';
+	      $("#frmVP_hdr").html(jscHdr);
+
+	      var jscData = '<table width="100%" border="1" cellspacing="1" cellpadding="2">';
+	      jscData += '<tr>' +
+	      	'<th>Srl</th>' + 
+	      	'<th>Step</th>' +
+	      	'<th>Control</th>' +
+	      	'<th>Responsibility</th>' +
+	      	'<th>Metrics</th>' + 
+	      	'</tr>';
+	      var ji, jnBalMerge;
+	      jnBalMerge = 0;
+	      for(ji=0; ji < o.nRow; ji++) {
+	      	jscData += '<tr>';
+	      	jscData += '<td>' + o.aRow[ji].cSrl + '</td>';
+	      	jscData += '<td>' + o.aRow[ji].cStep + '</td>';
+	      	jscData += '<td>' + Local_Tokenize(o.aRow[ji].cControl, o) + '</td>';
+	      	jscData += '<td>' + o.aRow[ji].cResponsibility + '</td>';
+	      	//if((o.aRow[ji].nMergeRows > 1) && (o.aRow[ji].cIsMergeStart==="Y")){
+	      	if(o.aRow[ji].nMergeRows > 1){
+	      		jscData += '<td rowspan="' + o.aRow[ji].nMergeRows + '">' + o.aRow[ji].cMetrics + '</td>';
+	      		jnBalMerge = o.aRow[ji].nMergeRows - 1;
+	      	} else if(jnBalMerge > 0) {
+	      		jnBalMerge--;
+	      	} else {
+	      		jscData += '<td>' + o.aRow[ji].cMetrics + '</td>';
+	      		jnBalMerge = 0;
+	        }
+	      	jscData += '</tr>';
+	      } // loop through all rows
+	      jscData += '</table>';
+	      $("#frmVP_data").html(jscData);
+	      return;
+	    }
+	  }
+	}); // AJAX for GetProcessData
+
+}); // document.ready function
+function Local_Tokenize(pcIn, o) {
+	var jscTokens = pcIn.split("$$");
+	var ji;
+	var jscOut = '';
+	if(jscTokens.length < 2) {
+		return pcIn;
+	}
+	for(ji=0; ji<(jscTokens.length-1);ji++){
+		if((ji % 2) == 0) {
+			jscOut += jscTokens[ji];
+		} else {
+			jscOut += '<a href="#" onclick="DownloadDoc(\'' + Z_GetProcess() + '\',\'' + jscTokens[ji] + '\',\'' + Local_GetTokenFileName(jscTokens[ji], o) + '\')">';
+			jscOut += Local_GetTokenDisplayName(jscTokens[ji], o);
+			jscOut += '</a>';
+		}
+	}
+	return jscOut;
+}
+function Local_GetTokenDisplayName(pcToken, o) {
+	var jscOut = '';
+	var ji;
+	for(ji=0; ji < o.nFile; ji++) {
+		if(o.aFile[ji].cToken === pcToken) {
+			jscOut = o.aFile[ji].cDisplayText;
+			ji = o.nFile + 1;
+		}
+	}
+	return jscOut;
+}
+function Local_GetTokenFileName(pcToken, o) {
+	var jscOut = '';
+	var ji;
+	for(ji=0; ji < o.nFile; ji++) {
+		if(o.aFile[ji].cToken === pcToken) {
+			jscOut = o.aFile[ji].cFileName;
+			ji = o.nFile + 1;
+		}
+	}
+	return jscOut;
+}
+function DownloadDoc(pcProcess, pcServerEileName, pcDiskFileName)
+{
+	$('#txtProcess').val(pcProcess);
+	$('#txtDiskFileName').val(pcServerEileName);
+	$('#txtFileName').val(pcDiskFileName);
+	alert(pcProcess + "/" + pcServerEileName + "/" + pcDiskFileName);
+	$('#frmDownload').submit();
+}
+</script>
+<form name="frmDownload" id="frmDownload" method="POST" action="frmDownloadDoc.asp">
+	<input type="hidden" name="txtProcess" id="txtProcess"></input>
+	<input type="hidden" name="txtFileName" id="txtFileName"></input>
+	<input type="hidden" name="txtDiskFileName" id="txtDiskFileName"></input>
+</form>
+</body>
+</html>

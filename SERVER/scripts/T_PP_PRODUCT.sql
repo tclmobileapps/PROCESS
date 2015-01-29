@@ -1,0 +1,12 @@
+CREATE TABLE T_PP_PRODUCT
+(
+	cVertical			NVARCHAR(20)	NOT NULL,
+	cProduct			NVARCHAR(20)	NOT NULL,
+	cName				NVARCHAR(100)	NOT NULL,
+	cShortName			NVARCHAR(20)	NOT NULL,
+	nDisplayOrder		DECIMAL(2) 		NOT NULL,
+	cIsActive			NVARCHAR(1) 	NOT NULL,
+	PRIMARY KEY(cVertical, cProduct),
+	FOREIGN KEY(cVertical) REFERENCES T_PP_VERTICAL(cVertical),
+	CONSTRAINT C_PP_PRODUCT_01 CHECK(cIsActive IN('Y','N'))
+)

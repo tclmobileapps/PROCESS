@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<title>Process Portal</title>
+	<link rel="stylesheet" href="css/style.css"></link>
+</head>
+<body>
+
+<section id="main">
+<div id="funcbox">
+	<h2>Process Portal</h2>
+	<h3>Login Page</h3>
+	<center>
+	<form name="frmLogin" id="frmLogin" method="POST" action="home.html">
+	  <table border="0" cellspacing="10" cellpadding="10">
+	    <tr>
+	    <td>
+		<label for="frmLogin_txtUser" value="User ID">User ID</label>
+		</td>
+		<td>
+		<input type="text" name="frmLogin_txtUser" id="frmLogin_txtUser" value="531953" placeholder="Your Domain ID"></input>
+		</td>
+		</tr>
+		<tr>
+		<td>
+		<label for="frmLogin_txtPassword">Password</label>
+		</td>
+		<td>
+		<input type="password" name="frmLogin_txtPassword" id="frmLogin_txtPassword" value="531953"></input>
+		</td>
+		</tr>
+		<tr>
+		<td colspan="2">
+		<input type="button" name="frmLogin_btnLogin" id="frmLogin_btnLogin" value="Login"></input>
+		</td>
+		</tr>
+	  </table>
+	</form>
+	</center>
+</div>
+</section>
+
+<script src="js/jquery-1.11.1.min.js" type="text/javascript"></script>
+<script src="js/mustache-0.8.1.min.js" type="text/javascript"></script>
+<script src="js/polyfill.js" type="text/javascript"></script>
+<script src="js/general.js" type="text/javascript"></script>
+<script src="js/script.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+$("document").ready(function(e){
+	Z_InitLocalStorage();
+	$("#frmLogin_btnLogin").click(function(e){
+		frmLogin_try2Login();	
+	});
+});
+</script>
+</body>
+</html>

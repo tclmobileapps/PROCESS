@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<title>Process Portal</title>
+	<link rel="stylesheet" href="css/style.css"></link>
+</head>
+<body>
+
+<section id="home">
+<div id="funcbox">
+	<h2>Process Portal</h2>
+	<h3>Search By Function</h3>
+	<center>
+		<table border="0" cellspacing="10" cellpadding="10">
+			<tr>
+				<td>Vertical</td>
+				<td>
+					<select name="frmSBF_selVertical" id="frmSBF_selVertical">
+						<option value="">(Please wait)</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Product</td>
+				<td>
+					<select name="frmSBF_selProduct" id="frmSBF_selProduct">
+						<option value="">(Choose a Product)</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Process</td>
+				<td>
+					<select name="frmSBF_selProcess" id="frmSBF_selProcess">
+						<option value="">(Choose a Process)</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					<input type="button" name="frmSBF_ViewProcess" id="frmSBF_ViewProcess" value="View Process"></input>
+				</td>
+			</tr>
+		</table>
+	</center>
+</div
+</section>
+
+<script src="js/jquery-1.11.1.min.js" type="text/javascript"></script>
+<script src="js/mustache-0.8.1.min.js" type="text/javascript"></script>
+<script src="js/polyfill.js" type="text/javascript"></script>
+<script src="js/general.js" type="text/javascript"></script>
+<script src="js/script.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+$("document").ready(function(e){
+	if(!LocalValidateToken()) {
+		return;
+	}
+	$.ajax(
+	{
+	  Type: "POST",
+	  contentType: "application/json",
+	  url: "api_PP_GetVertical.asp?callback=?",
+	  data: { 
+	  	'txtParam1': Z_GetMe(), 
+	  	'txtParam2': Z_GetToken()
+	  },
+	  success: function(rv) {
+	    var o = jQuery.parseJSON(rv);
+	    if(o.bIsError)
+	    {
+	      alert("Unable to retrieve vertical list: " + o.cErrorMessage);
+	      return;
+	    }
+	    else
+	    {
+	      var jscVertical = '';
+	      var ji = 0;
+	      jscVertical += '<option value="">(Choose a Vertical)</option>';
+	      for(ji=0; ji < o.nVerticals; ji++) {
+	      	jscVertical += '<option value="' + o.aVerticals[ji].cVertical + '">' + o.aVerticals[ji].cName + '</option>';
+	      }
+	      $("#frmSBF_selVertical").html(jscVertical);
+	      return;
+	    }
+	  }
+	}); // AJAX for GetVertical
+	$("#frmSBF_selVertical").blur(function(e){
+		var jscProduct = '', jscProcess = '';
+		jscProduct = '<option value="">Please wait ...</option>';
+		$("#frmSBF_selProduct").html(jscProduct);
+		jscProcess = '<option value="">(Choose a Process)</option>';
+		$("#frmSBF_selProcess").html(jscProcess); 
+		$.ajax(
+		{
+		  Type: "POST",
+		  contentType: "application/json",
+		  url: "api_PP_GetProduct.asp?callback=?",
+		  data: { 
+		  	'txtParam1': Z_GetMe(), 
+		  	'txtParam2': Z_GetToken(),
+		  	'txtParamcVertical': $("#frmSBF_selVertical").val()
+		  },
+		  success: function(rv) {
+		    var o = jQuery.parseJSON(rv);
+		    if(o.bIsError)
+		    {
+		      alert("Unable to retrieve product list: " + o.cErrorMessage);
+		      return;
+		    }
+		    else
+		    {
+		      jscProduct = '';
+		      var ji = 0;
+		      jscProduct += '<option value="">(Choose a Product)</option>';
+		      for(ji=0; ji < o.nProducts; ji++) {
+		      	jscProduct += '<option value="' + o.aProducts[ji].cProduct + '">' + o.aProducts[ji].cName + '</option>';
+		      }
+		      $("#frmSBF_selProduct").html(jscProduct);
+		      return;
+		    }
+		  }
+		}); // AJAX for GetProduct		
+	}); // blur of selVertical
+	$("#frmSBF_selProduct").blur(function(e){
+		var jscProcess = '';
+		jscProcess = '<option value="">Please wait ...</option>';
+		$("#frmSBF_selProcess").html(jscProcess); 
+		$.ajax(
+		{
+		  Type: "POST",
+		  contentType: "application/json",
+		  url: "api_PP_GetProcessByFunction.asp?callback=?",
+		  data: { 
+		  	'txtParam1': Z_GetMe(), 
+		  	'txtParam2': Z_GetToken(),
+		  	'txtParamcVertical': $("#frmSBF_selVertical").val(),
+		  	'txtParamcProduct': $("#frmSBF_selProduct").val()
+		  },
+		  success: function(rv) {
+		    var o = jQuery.parseJSON(rv);
+		    if(o.bIsError)
+		    {
+		      alert("Unable to retrieve process list: " + o.cErrorMessage);
+		      return;
+		    }
+		    else
+		    {
+		      jscProcess = '';
+		      var ji = 0;
+		      jscProcess += '<option value="">(Choose a Process)</option>';
+		      for(ji=0; ji < o.nProcesses; ji++) {
+		      	jscProcess += '<option value="' + o.aProcesses[ji].cProcess + '">' + o.aProcesses[ji].cName + '</option>';
+		      }
+		      $("#frmSBF_selProcess").html(jscProcess);
+		      return;
+		    }
+		  }
+		}); // AJAX for GetProcessByFunction		
+	}); // blur of selProcess
+	
+	$("#frmSBF_selProcess").blur(function(e){
+		//alert("Blur");
+	});
+	$("#frmSBF_ViewProcess").click(function(e){
+		if($("#frmSBF_selProcess").prop('selectedIndex') < 1) {
+			alert("Please select a Process");
+			return;
+		}
+	    alert("About to show data for process: " + $( "#frmSBF_selProcess option:selected" ).text());
+  		Z_SetProcess($('#frmSBF_selProcess').val());
+  		window.location.href = "viewProcess.html";
+
+/*		ShowProcess($('#frmSBF_selProcess').val(), $( "#frmSBF_selProcess option:selected" ).text());
+*/
+	});
+}); // document.ready function
+</script>
+</body>
+</html>

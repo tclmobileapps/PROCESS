@@ -1,0 +1,9 @@
+CREATE TABLE T_PP_PROCESS_FILE
+(
+	cProcess 			NVARCHAR(20)	NOT NULL,
+	cToken				NVARCHAR(200)	NOT NULL,
+	cFileName			NVARCHAR(200)		NULL,
+	cDisplayText		NVARCHAR(2000) 		NULL,
+	PRIMARY KEY(cProcess, cToken),
+	FOREIGN KEY(cProcess) REFERENCES T_PP_PROCESS(cProcess)
+)

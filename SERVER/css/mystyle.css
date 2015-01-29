@@ -1,0 +1,314 @@
+body {
+	background: #EEE7D5;
+	font-family: 'Libre Baskerville';
+}
+
+/* Start of Func Styles */
+
+#funcbox {
+	width: 320px;
+	height: 480px;
+	margin: 0 auto;
+	//background: #93A1A1;
+	background: #2c6eb5;
+	padding: 1px 20px;
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+#funcbox h2, #funcbox h3, #funcbox h4 {
+	font-weight: normal;
+	margin: 0;
+	padding: 0;
+}
+
+#funcbox h2 {
+	font-size: 2.5em;
+	line-height: 1em;
+	font-family: 'Monoton';
+	color: #d7df36;
+}
+
+#funcbox h3 {
+	font-size: 2em;
+	line-height: .9em;
+	font-family: 'Wendy One';
+	//color: #115F79;
+	color: #00FFFF;
+}
+
+#funcbox h4 {
+	//color: #973C26;
+	color: #93DC69;
+	font-weight: bold;
+	margin-bottom: 5px;
+	line-height: 1.2em;
+}		
+
+#funcbox img {
+	float: right;
+	margin-left: 10px;
+	border-radius: 10px;
+	width: 100px;
+}
+
+#funcbox p {
+	//color: #1E3A40;
+	color: white;
+	font-size: .9em;
+}
+
+#funcbox #next_btn, #funcbox #prev_btn {
+	background: #D33682;
+	padding: 5px 10px;
+	border-radius: 10px;
+	margin: 10px 0;
+	display: inline-block;
+}
+
+#funcbox a#next_btn, #funcbox a#prev_btn {
+	text-decoration: none;
+	color: white;
+}
+
+/* End of Func Styles */
+
+/* Start of Prod styles */
+#prodbox {
+	width: 320px;
+	height: 480px;
+	margin: 0 auto;
+	//background: #93A1A1;
+	background: #2c6eb5;
+	padding: 1px 20px;
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+#prodbox h2, #prodbox h3, #prodbox h4 {
+	font-weight: normal;
+	margin: 0;
+	padding: 0;
+}
+
+#prodbox h2 {
+	font-size: 2.5em;
+	line-height: 1em;
+	font-family: 'Monoton';
+	color: #d7df36;
+}
+
+#prodbox h3 {
+	font-size: 2em;
+	line-height: .9em;
+	font-family: 'Wendy One';
+	//color: #115F79;
+	color: #00FFFF;
+}
+
+#prodbox h4 {
+	//color: #973C26;
+	color: #93DC69;
+	font-weight: bold;
+	margin-bottom: 5px;
+	line-height: 1.2em;
+}		
+
+#prodbox img {
+	float: right;
+	margin-left: 10px;
+	border-radius: 10px;
+	width: 100px;
+}
+
+#prodbox p {
+	//color: #1E3A40;
+	color: white;
+	font-size: .9em;
+}
+
+#prodbox table{
+	color: yellow;
+	font-family: 'Libre Baskerville';
+}
+
+#prodbox #next_btn, #prodbox #prev_btn {
+	background: #D33682;
+	padding: 5px 10px;
+	border-radius: 10px;
+	margin: 10px 0;
+	display: inline-block;
+}
+
+#prodbox a#next_btn, #prodbox a#prev_btn {
+	text-decoration: none;
+	color: white;
+}
+/* End of Prod Styles */
+
+/* Start of Proc styles */
+#procbox {
+	width: 320px;
+	height: 480px;
+	margin: 0 auto;
+	//background: #93A1A1;
+	background: #2c6eb5;
+	padding: 1px 20px;
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+#procbox h2, #procbox h3, #procbox h4 {
+	font-weight: normal;
+	margin: 0;
+	padding: 0;
+}
+
+#procbox h2 {
+	font-size: 2.5em;
+	line-height: 1em;
+	font-family: 'Monoton';
+	color: #d7df36;
+}
+
+#procbox h3 {
+	font-size: 2em;
+	line-height: .9em;
+	font-family: 'Wendy One';
+	//color: #115F79;
+	color: #00FFFF;
+}
+
+#procbox h4 {
+	//color: #973C26;
+	color: #93DC69;
+	font-weight: bold;
+	margin-bottom: 5px;
+	line-height: 1.2em;
+}		
+
+#procbox img {
+	float: right;
+	margin-left: 10px;
+	border-radius: 10px;
+	width: 100px;
+}
+
+#procbox p {
+	//color: #1E3A40;
+	color: white;
+	font-size: .9em;
+}
+
+#procbox table{
+	color: yellow;
+	font-family: 'Libre Baskerville';
+}
+
+#procbox #next_btn, #procbox #prev_btn {
+	background: #D33682;
+	padding: 5px 10px;
+	border-radius: 10px;
+	margin: 10px 0;
+	display: inline-block;
+}
+
+#procbox a{
+	text-decoration: none;
+	color: white;
+}
+
+#procbox a#next_btn, #procbox a#prev_btn {
+	text-decoration: none;
+	color: white;
+}
+/* End of Proc Styles */
+
+/* Start of Proctab styles */
+#proctabbox {
+	//width: 640px;
+	//height: 480px;
+	margin: 0 auto;
+	//background: #93A1A1;
+	background: #2c6eb5;
+	padding: 1px 20px;
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+#proctabbox h2, #proctabbox h3, #proctabbox h4 {
+	font-weight: normal;
+	margin: 0;
+	padding: 0;
+}
+
+#proctabbox h2 {
+	font-size: 2.5em;
+	line-height: 1em;
+	font-family: 'Monoton';
+	color: #d7df36;
+}
+
+#proctabbox h3 {
+	font-size: 2em;
+	line-height: .9em;
+	font-family: 'Wendy One';
+	//color: #115F79;
+	color: #00FFFF;
+}
+
+#proctabbox h4 {
+	//color: #973C26;
+	color: #93DC69;
+	font-weight: bold;
+	margin-bottom: 5px;
+	line-height: 1.2em;
+}		
+
+#proctabbox img {
+	float: right;
+	margin-left: 10px;
+	border-radius: 10px;
+	width: 100px;
+}
+
+#proctabbox p {
+	//color: #1E3A40;
+	color: white;
+	font-size: .9em;
+}
+
+#proctabbox table{
+	color: yellow;
+	font-family: 'Libre Baskerville';
+}
+
+#proctabbox #next_btn, #proctabbox #prev_btn {
+	background: #D33682;
+	padding: 5px 10px;
+	border-radius: 10px;
+	margin: 10px 0;
+	display: inline-block;
+}
+
+#proctabbox a{
+	text-decoration: none;
+	color: white;
+}
+
+#proctabbox a#next_btn, #proctabbox a#prev_btn {
+	text-decoration: none;
+	color: white;
+}
+/* End of Proctab Styles */
+
+.note
+{
+	font-style: italic;
+}
+
+#proctabbox span a img
+{
+	width: 16px;
+	height: 16px;
+}
